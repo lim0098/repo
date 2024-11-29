@@ -1,0 +1,606 @@
+{
+  "caigou": [
+    {
+      "id": "1040",
+      "date": "2024/11/28",
+      "title": "当月购进备件",
+      "hanshuijine": "4693001.73",
+      "shuie": 539902.85,
+      "shuliang": "2",
+      "danjia": "2"
+    },
+    {
+      "id": "c65b",
+      "date": "2024/11/28",
+      "title": "暂估购进叉车槽",
+      "shuliang": "2115",
+      "danjia": "6003",
+      "hanshuijine": "12696345",
+      "shuie": 1460641.46
+    },
+    {
+      "id": "0faa",
+      "date": "2024/11/28",
+      "title": "上月留底",
+      "hanshuijine": "1253341.06",
+      "shuie": 144189.68
+    }
+  ],
+  "xiaoshou": [
+    {
+      "id": "c049",
+      "date": "2024/11/28",
+      "title": "叉车槽",
+      "shuliang": "2842.3",
+      "danjia": "6100",
+      "hanshuijine": "17338052.57",
+      "shuie": 1994643.22
+    },
+    {
+      "id": "3d23",
+      "date": "2024/11/28",
+      "title": "总成",
+      "shuliang": "289.94",
+      "danjia": "11873",
+      "hanshuijine": "3442419.65",
+      "shuie": 396030.58
+    },
+    {
+      "id": "4a95",
+      "date": "2024/11/28",
+      "title": "当月累计加工费",
+      "shuliang": "8765.45",
+      "danjia": "250",
+      "hanshuijine": "2191362.5",
+      "shuie": 252103.65
+    },
+    {
+      "id": "ad3b",
+      "date": "2024/11/28",
+      "title": "废钢",
+      "shuliang": "65.85",
+      "danjia": "2399",
+      "hanshuijine": "157973.49",
+      "shuie": 18173.94
+    },
+    {
+      "id": "f407",
+      "date": "2024/11/28",
+      "title": "锌锅锌锭（暂估）",
+      "shuliang": "20.48",
+      "danjia": "21000",
+      "hanshuijine": "429975",
+      "shuie": 49466.15
+    },
+    {
+      "id": "3e2f",
+      "date": "2024/11/28",
+      "title": "未开租金收入",
+      "shuliang": "0",
+      "danjia": "0",
+      "hanshuijine": "270000",
+      "shuie": 31061.95
+    }
+  ],
+  "menu": [
+    {
+      "path": "/routing",
+      "component": null,
+      "redirect": "user",
+      "children": [
+        {
+          "path": "/routing/user",
+          "component": "user",
+          "name": "用户管理",
+          "meta": {}
+        },
+        {
+          "path": "/routing/menu",
+          "component": "menu",
+          "name": "菜单管理",
+          "meta": {}
+        }
+      ],
+      "name": "系统管理",
+      "meta": "undefined",
+      "id": "1853"
+    },
+    {
+      "path": "/data",
+      "component": null,
+      "redirect": "data",
+      "children": [
+        {
+          "path": "/data/tax",
+          "component": "BudgetTaxAmount",
+          "name": "税金",
+          "meta": {}
+        }
+      ],
+      "name": "数据管理",
+      "meta": "undefined",
+      "id": "ea2d"
+    }
+  ],
+  "roleauth": [
+    {
+      "id": "1",
+      "rolename": "admin",
+      "urlpermission": [
+        {
+          "path": "/routing"
+        },
+        {
+          "path": "/routing/user"
+        },
+        {
+          "path": "/routing/menu"
+        },
+        {
+          "path": "/data"
+        },
+        {
+          "path": "/data/tax"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "rolename": "editor",
+      "urlpermissions": [
+        {
+          "path": "/routing"
+        },
+        {
+          "path": "/routing/user"
+        },
+        {
+          "path": "/routing/menu"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "rolename": "avisitor",
+      "rulpermissions": [
+        {
+          "path": "/data"
+        },
+        {
+          "path": "/data/tax"
+        }
+      ]
+    }
+  ],
+  "user": [
+    {
+      "id": "1",
+      "name": "admin",
+      "password": "123456",
+      "token": "123",
+      "roles": [
+        {
+          "id": 1,
+          "title": "admin"
+        }
+      ],
+      "Permissions": [
+        "*:*:*"
+      ],
+      "userUrl": [
+        {
+          "path": "/routing",
+          "component": null,
+          "redirect": "user",
+          "children": [
+            {
+              "path": "/routing/user",
+              "component": "user",
+              "name": "用户管理",
+              "meta": {}
+            },
+            {
+              "path": "/routing/menu",
+              "component": "menu",
+              "name": "菜单管理",
+              "meta": {}
+            }
+          ],
+          "name": "系统管理",
+          "meta": "undefined"
+        },
+        {
+          "path": "/data",
+          "component": null,
+          "redirect": "data",
+          "children": [
+            {
+              "path": "/data/tax",
+              "component": "BudgetTaxAmount",
+              "name": "税金",
+              "meta": {}
+            }
+          ],
+          "name": "数据管理",
+          "meta": "undefined"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "name": "ces1",
+      "password": "123456",
+      "roles": [
+        {
+          "id": 2,
+          "title": "avisitor"
+        }
+      ],
+      "Permissions": [
+        "system:user:get"
+      ],
+      "userUrl": [
+        {
+          "path": "/routing",
+          "component": null,
+          "redirect": "user",
+          "children": [
+            {
+              "path": "/routing/user",
+              "component": "user",
+              "name": "用户管理",
+              "meta": {}
+            },
+            {
+              "path": "/routing/menu",
+              "component": "menu",
+              "name": "菜单管理",
+              "meta": {}
+            }
+          ],
+          "name": "系统管理",
+          "meta": "undefined"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "name": "ces2",
+      "password": "123456",
+      "roles": [
+        {
+          "id": 2,
+          "title": "editor"
+        }
+      ],
+      "Permissions": [
+        "system:user:*"
+      ],
+      "userUrl": [
+        {
+          "path": "/data",
+          "component": null,
+          "redirect": "data",
+          "children": [
+            {
+              "path": "/data/tax",
+              "component": "BudgetTaxAmount",
+              "name": "税金",
+              "meta": {}
+            }
+          ],
+          "name": "数据管理",
+          "meta": "undefined"
+        }
+      ]
+    }
+  ],
+  "data": [
+    {
+      "id": "1",
+      "user": "hc",
+      "name": "Harry Cole",
+      "phone": "1-415-2345678",
+      "gender": "M",
+      "age": 25,
+      "maney": 251,
+      "birth": "2024-07-01"
+    },
+    {
+      "id": "2",
+      "user": "sm",
+      "name": "Simon Minolta",
+      "phone": "1-123-7675682",
+      "gender": "M",
+      "age": 20,
+      "maney": 242,
+      "birth": "2024-11-12"
+    },
+    {
+      "id": "3",
+      "user": "ra",
+      "name": "Raymond Atom",
+      "phone": "1-456-9981212",
+      "gender": "M",
+      "age": 19,
+      "maney": 233,
+      "birth": "2024-06-11"
+    },
+    {
+      "id": "4",
+      "user": "ag",
+      "name": "Mary George",
+      "phone": "1-556-1245684",
+      "gender": "F",
+      "age": 22,
+      "maney": 264,
+      "birth": "2024-08-01"
+    },
+    {
+      "id": "5",
+      "user": "kl",
+      "name": "Kenny Linus",
+      "phone": "1-891-2345685",
+      "gender": "M",
+      "age": 29,
+      "maney": 275,
+      "birth": "2024-09-01"
+    },
+    {
+      "id": "5",
+      "user": "kl",
+      "name": "Kenny Linus",
+      "phone": "1-891-2345685",
+      "gender": "M",
+      "age": 29,
+      "maney": 275,
+      "birth": "2024-09-01"
+    },
+    {
+      "id": "5",
+      "user": "kl",
+      "name": "Kenny Linus",
+      "phone": "1-891-2345685",
+      "gender": "M",
+      "age": 29,
+      "maney": 275,
+      "birth": "2024-09-01"
+    },
+    {
+      "id": "5",
+      "user": "kl",
+      "name": "Kenny Linus",
+      "phone": "1-891-2345685",
+      "gender": "M",
+      "age": 29,
+      "maney": 275,
+      "birth": "2024-09-01"
+    },
+    {
+      "id": "5",
+      "user": "kl",
+      "name": "Kenny Linus",
+      "phone": "1-891-2345685",
+      "gender": "M",
+      "age": 29,
+      "maney": 275,
+      "birth": "2024-09-01"
+    },
+    {
+      "id": "5",
+      "user": "kl",
+      "name": "Kenny Linus",
+      "phone": "1-891-2345685",
+      "gender": "M",
+      "age": 29,
+      "maney": 275,
+      "birth": "2024-09-01"
+    },
+    {
+      "id": "5",
+      "user": "kl",
+      "name": "Kenny Linus",
+      "phone": "1-891-2345685",
+      "gender": "M",
+      "age": 29,
+      "maney": 275,
+      "birth": "2024-09-01"
+    },
+    {
+      "id": "5",
+      "user": "kl",
+      "name": "Kenny Linus",
+      "phone": "1-891-2345685",
+      "gender": "M",
+      "age": 29,
+      "maney": 275,
+      "birth": "2024-09-01"
+    },
+    {
+      "id": "5",
+      "user": "kl",
+      "name": "Kenny Linus",
+      "phone": "1-891-2345685",
+      "gender": "M",
+      "age": 29,
+      "maney": 275,
+      "birth": "2024-09-01"
+    },
+    {
+      "id": "5",
+      "user": "kl",
+      "name": "Kenny Linus",
+      "phone": "1-891-2345685",
+      "gender": "M",
+      "age": 29,
+      "maney": 275,
+      "birth": "2024-09-01"
+    },
+    {
+      "id": "5",
+      "user": "kl",
+      "name": "Kenny Linus",
+      "phone": "1-891-2345685",
+      "gender": "M",
+      "age": 29,
+      "maney": 275,
+      "birth": "2024-09-01"
+    }
+  ],
+  "data1": [
+    {
+      "id": "1",
+      "user": "hc",
+      "name": "Harry Cole",
+      "phone": "1-415-2345678",
+      "gender": "M",
+      "age": 25,
+      "maney": 256,
+      "birth": "2024-07-01"
+    },
+    {
+      "id": "2",
+      "user": "sm",
+      "name": "Simon Minolta",
+      "phone": "1-123-7675682",
+      "gender": "M",
+      "age": 20,
+      "maney": 247,
+      "birth": "2024-11-12"
+    },
+    {
+      "id": "3",
+      "user": "ra",
+      "name": "Raymond Atom",
+      "phone": "1-456-9981212",
+      "gender": "M",
+      "age": 19,
+      "maney": 238,
+      "birth": "2024-06-11"
+    },
+    {
+      "id": "4",
+      "user": "ag",
+      "name": "Mary George",
+      "phone": "1-556-1245684",
+      "gender": "F",
+      "age": 22,
+      "maney": 269,
+      "birth": "2024-08-01"
+    },
+    {
+      "id": "5",
+      "user": "kl",
+      "name": "Kenny Linus",
+      "phone": "1-891-2345685",
+      "gender": "M",
+      "age": 29,
+      "maney": 271,
+      "birth": "2024-09-01"
+    }
+  ],
+  "data2": [
+    {
+      "id": "1",
+      "user": "hc",
+      "name": "Harry Cole",
+      "phone": "1-415-2345678",
+      "gender": "M",
+      "age": 25,
+      "maney": 252,
+      "birth": "2024-07-01"
+    },
+    {
+      "id": "2",
+      "user": "sm",
+      "name": "Simon Minolta",
+      "phone": "1-123-7675682",
+      "gender": "M",
+      "age": 20,
+      "maney": 243,
+      "birth": "2024-11-12"
+    },
+    {
+      "id": "3",
+      "user": "ra",
+      "name": "Raymond Atom",
+      "phone": "1-456-9981212",
+      "gender": "M",
+      "age": 19,
+      "maney": 234,
+      "birth": "2024-06-11"
+    },
+    {
+      "id": "4",
+      "user": "ag",
+      "name": "Mary George",
+      "phone": "1-556-1245684",
+      "gender": "F",
+      "age": 22,
+      "maney": 265,
+      "birth": "2024-08-01"
+    },
+    {
+      "id": "5",
+      "user": "kl",
+      "name": "Kenny Linus",
+      "phone": "1-891-2345685",
+      "gender": "M",
+      "age": 29,
+      "maney": 276,
+      "birth": "2024-09-01"
+    }
+  ],
+  "data3": [
+    {
+      "id": "1",
+      "user": "hc",
+      "name": "Harry Cole",
+      "phone": "1-415-2345678",
+      "gender": "M",
+      "age": 25,
+      "maney": 257,
+      "birth": "2024-07-01"
+    },
+    {
+      "id": "2",
+      "user": "sm",
+      "name": "Simon Minolta",
+      "phone": "1-123-7675682",
+      "gender": "M",
+      "age": 20,
+      "maney": 248,
+      "birth": "2024-11-12"
+    },
+    {
+      "id": "3",
+      "user": "ra",
+      "name": "Raymond Atom",
+      "phone": "1-456-9981212",
+      "gender": "M",
+      "age": 19,
+      "maney": 239,
+      "birth": "2024-06-11"
+    },
+    {
+      "id": "4",
+      "user": "ag",
+      "name": "Mary George",
+      "phone": "1-556-1245684",
+      "gender": "F",
+      "age": 22,
+      "maney": 261,
+      "birth": "2024-08-01"
+    },
+    {
+      "id": "5",
+      "user": "kl",
+      "name": "Kenny Linus",
+      "phone": "1-891-2345685",
+      "gender": "M",
+      "age": 29,
+      "maney": 272,
+      "birth": "2024-09-01"
+    }
+  ]
+}

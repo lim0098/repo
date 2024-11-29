@@ -1,0 +1,46 @@
+const userApi: any[] = [
+    {
+        id:1,
+        name:'admin',
+        password:'123456',
+        roles:[
+          {
+            id:1,
+            title:'admin'
+          }
+        ],
+        Permissions:[
+          '*:*:*'
+        ]
+      },
+      {
+        id:2,
+        name:'ces1',
+        password:'123456',
+        roles:[
+          {
+            id:2,
+            title:'avisitor'
+          }
+        ],
+        Permissions:[
+          'system:user:get'
+        ]
+      },
+      {
+        id:3,
+        name:'ces2',
+        password:'123456',
+        roles:[
+          {
+            id:2,
+            title:'editor'
+          }
+        ],
+        Permissions:[
+          'system:user:*'
+        ]
+      },
+  ]
+  
+  export default userApi
