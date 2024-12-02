@@ -108,14 +108,15 @@ interface DataItem {
 
 const fetchData = ref([])
 const fetchData1 = computed(() => {
-  return [...fetchData.value].sort((a, b) => b.id - a.id);
+  return [...fetchData.value].sort((a: any, b: any) => b.id - a.id);
 });
 
 // 获取数据
-const url = 'http://localhost:3000/caigou'
+// const url = 'http://localhost:3000/caigou'
+const url = 'http://127.0.0.3:8080/zsbb/caigou'
 const getdata = async () => {
   try {
-    startDate.value = zsbbStore.startDate
+    startDate.value = zsbbStore.starDate
     const response = await axios.get(url + "?date=" + startDate.value)
     fetchData.value = response.data
   } catch (error) {
@@ -128,21 +129,21 @@ const editableData: UnwrapRef<Record<string, DataItem>> = reactive({});
 
 // 编辑按钮
 const edit = (key: string) => {
-  editableData[key] = cloneDeep(dataSource.value.filter(item => key === item.id)[0]);
+  editableData[key] = cloneDeep(dataSource.value.filter(item => key === item['id'])[0]);
   console.log(editableData[key])
 };
 
 // 保存按钮
 const save = (key: string) => {
-  Object.assign(dataSource.value.filter(item => key === item.id)[0], editableData[key]);
+  Object.assign(dataSource.value.filter(item => key === item['id'])[0], editableData[key]);
   delete editableData[key];
-  updatedData(dataSource.value.filter(item => key === item.id)[0])
+  updatedData(dataSource.value.filter(item => key === item['id'])[0])
 };
 
 // PUT请求 - 保存修改数据
-async function updatedData(data) {
+async function updatedData(data: any) {
   try {
-    const response = await axios.put(`${url}/${data.id}`, data);
+    const response = await axios.put(`${url}/${data.id}/`, data);
     // activeIndex.value = -1;
   } catch (error) {
     console.error('Error updating post:', error);
@@ -155,12 +156,12 @@ const cancel = (key: string) => {
 
 // 对税额求和
 const total = computed(() => {
-  return Math.round(fetchData.value.reduce((sum, item) => sum + Number(item.shuie), 0)*100)/100
+  return Math.round(fetchData.value.reduce((sum, item: any) => sum + Number(item.shuie), 0)*100)/100
 })
 zsbbStore.jinxiiangshuie=total
 
 // DELETE请求 - 删除数据
-async function handleDelete(postId) {
+async function handleDelete(postId: any) {
   try {
     await axios.delete(`${url}/${postId}`);
     getdata()

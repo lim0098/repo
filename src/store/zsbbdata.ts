@@ -12,7 +12,8 @@ export const usezsbbStore = defineStore({
     persist: true,
     // 计算属性
     getters: {
-        yinjiaoshuijin: state => Math.round((state.xiaoxiangshuie -state.jinxiiangshuie)*100)/100
+        yinjiaoshuijin: state => Math.round((state.xiaoxiangshuie -state.jinxiiangshuie)*100)/100,
+        // cjinxiiangshuie: state => (state.jinxiiangshuie)
       },
 
     actions: {

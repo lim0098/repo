@@ -36,7 +36,7 @@ import { startOfWeek, addDays } from 'date-fns';
 import { usezsbbStore } from '@/store/zsbbdata'
 
 // 计算当前周四的日期
-const startDate = ref('');//日期
+const startDate = ref();//日期
 const getThisWeekThursday = () => {
   const now = new Date()
   const start = startOfWeek(now)
@@ -46,13 +46,13 @@ startDate.value = getThisWeekThursday();// 设置默认显示的日期
 
 // 日期存入pinia
 const zsbbStore = usezsbbStore()
-zsbbStore.startDate = startDate.value.toLocaleDateString()
+zsbbStore.starDate = startDate.value.toLocaleDateString()
 
 // 接收兄弟组件的方法
 const emits = defineEmits(['caigouUse', 'xiaoshouUse'])
 
 const childhondlclick = () => {
-  zsbbStore.startDate = startDate.value.toLocaleDateString()
+  zsbbStore.starDate = startDate.value.toLocaleDateString()
   emits('caigouUse')
   emits('xiaoshouUse')
   // emits('a4Use')

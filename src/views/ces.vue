@@ -34,8 +34,14 @@
     </template>
     <a-pagination current="1" pageSize="6" show-less-items />
   </a-table>
-  <addxiaoshou :isShow="isShowDialog" @closeDialog="closeDialog" @getdata="getdata">
-  </addxiaoshou>
+  <addcaigou :isShow="isShowDialog" @closeDialog="closeDialog" @getdata="getdata">
+  </addcaigou>
+  <el-form-item label="开始日期">
+      <el-col :span="6">
+        <el-date-picker v-model="startDate" type="date" placeholder="Pick a date" clearable />
+      </el-col>
+    </el-form-item>
+  <a-button size="small" type="primary" @click="getdata">查询</a-button>
 </template>
 <script lang="ts" setup>
 import { cloneDeep } from 'lodash-es';
@@ -43,10 +49,10 @@ import { reactive, ref, computed } from 'vue';
 import type { UnwrapRef } from 'vue';
 import { usezsbbStore } from '@/store/zsbbdata'
 import axios from 'axios';
-import addxiaoshou from '@/layout/components/zhousibaobiao/addxiaoshou.vue'
+import addcaigou from '@/layout/components/zhousibaobiao/addcaigou.vue'
 
 // // 计算当前周四的日期
-const startDate = ref('');//日期
+const startDate = ref();//日期
 // const getThisWeekThursday = () => {
 //   const now = new Date()
 //   const start = startOfWeek(now)
@@ -68,7 +74,7 @@ const pagination= {
       }
 const columns = [
   {
-    title: '销售项目',
+    title: '项目',
     dataIndex: 'title',
     width: '15%',
   },
@@ -83,12 +89,12 @@ const columns = [
     width: '15%',
   },
   {
-    title: '含税销售金额',
+    title: '含税采购金额',
     dataIndex: 'hanshuijine',
     width: '15%',
   },
   {
-    title: '销项税额',
+    title: '进项税额',
     dataIndex: 'shuie',
     width: '15%',
   },
@@ -112,12 +118,14 @@ const fetchData1 = computed(() => {
 });
 
 // 获取数据
-const url = 'http://localhost:3000/xiaoshou'
+// const url = 'http://localhost:3000/caigou'
+const url = 'http://127.0.0.3:8080/zsbb/caigou'
 const getdata = async () => {
   try {
-    startDate.value = zsbbStore.startDate
-    const response = await axios.get(url + "?date=" + startDate.value)
+    // startDate.value = zsbbStore.startDate
+    const response = await axios.get(url + "?date=" + startDate.value.toLocaleDateString())
     fetchData.value = response.data
+    console.log( response.data)
   } catch (error) {
     console.error('获取数据出错', error)
   }
@@ -126,15 +134,20 @@ const getdata = async () => {
 const dataSource = ref(fetchData1);
 const editableData: UnwrapRef<Record<string, DataItem>> = reactive({});
 
+// 编辑按钮
 const edit = (key: string) => {
   editableData[key] = cloneDeep(dataSource.value.filter(item => key === item.id)[0]);
   console.log(editableData[key])
 };
+
+// 保存按钮
 const save = (key: string) => {
   Object.assign(dataSource.value.filter(item => key === item.id)[0], editableData[key]);
   delete editableData[key];
   updatedData(dataSource.value.filter(item => key === item.id)[0])
 };
+
+// PUT请求 - 保存修改数据
 async function updatedData(data) {
   try {
     const response = await axios.put(`${url}/${data.id}`, data);
@@ -143,9 +156,17 @@ async function updatedData(data) {
     console.error('Error updating post:', error);
   }
 }
+
 const cancel = (key: string) => {
   delete editableData[key];
 };
+
+// 对税额求和
+const total = computed(() => {
+  return Math.round(fetchData.value.reduce((sum, item) => sum + Number(item.shuie), 0)*100)/100
+})
+zsbbStore.jinxiiangshuie=total
+
 // DELETE请求 - 删除数据
 async function handleDelete(postId) {
   try {

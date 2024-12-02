@@ -22,7 +22,7 @@
           <el-input v-model="form.hanshuijine" />
         </el-form-item>
         <el-form-item label="税额">
-          <el-input v-model="form.shuie" disabled/>
+          <el-input v-model="shuie" disabled/>
         </el-form-item>
       </el-form>
       <el-row>
@@ -40,7 +40,7 @@
   import axios from 'axios';
   
   // 计算当前周四的日期
-  const startDate = ref('');//日期
+  const startDate = ref();//日期
   const getThisWeekThursday = () => {
     const now = new Date()
     const start = startOfWeek(now);
@@ -61,13 +61,15 @@
   }
   
   const form = reactive({
-    // id: 4,
-    title: '1',
-    hanshuijine: '',
-    shuie: '',
+    title: '',
+    shuliang: '',
+    danjia: '',
+    hanshuijine: 0,
+    // shuie: shuie.value,
   })
   
-  const url = 'http://localhost:3000/caigou'
+  // const url = 'http://localhost:3000/caigou'
+  const url = 'http://127.0.0.3:8080/zsbb/caigou/'
   const onSubmit = async () => {
     try {
       const response = await axios.post(url, {
@@ -76,7 +78,7 @@
         shuliang: form.shuliang,
         danjia: form.danjia,
         hanshuijine: form.hanshuijine,
-        shuie: form.shuie,
+        shuie: shuie.value,
       })
       emit('getdata')
       console.log('添加成功',response.data)
@@ -90,7 +92,7 @@
   //   return Math.round(form.shuliang * form.danjia * 100) / 100
   // })
   
-  form.shuie = computed(() => {
+  const shuie = computed(() => {
     return Math.round(form.hanshuijine / 1.13 * 0.13 * 100) / 100
   })
   
