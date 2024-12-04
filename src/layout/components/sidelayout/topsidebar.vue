@@ -28,7 +28,7 @@ const logout =  () => {
     // 清除认证状态，例如清除token
     store.logout();
     localStorage.clear()
-    console.log(store.userInfo.userUrl,'退出')
+    // console.log(store.userInfo.userUrl,'退出')
     // 重定向到登录页面
     router.push('/');
   } catch (error) {

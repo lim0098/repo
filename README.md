@@ -50,3 +50,16 @@ npm config set registry https://mirrors.huaweicloud.com/repository/npm/
 ```sh
 json-server --watch db.json
 ```
+# 在本地仓库中更改文件
+ 
+# 将更改添加到暂存区
+git add .
+ 
+# 提交更改，包括一条提交信息
+git commit -m "描述您的更改"
+ 
+# 推送更改到远程仓库的主分支
+git push origin master
+
+环境变量配置
+https://blog.csdn.net/weixin_55049839/article/details/140871095

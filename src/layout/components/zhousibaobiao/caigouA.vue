@@ -44,7 +44,7 @@ import type { UnwrapRef } from 'vue';
 import { usezsbbStore } from '@/store/zsbbdata'
 import axios from 'axios';
 import addcaigou from '@/layout/components/zhousibaobiao/addcaigou.vue'
-
+import service from '@/utils/interceptors';
 // // 计算当前周四的日期
 const startDate = ref('');//日期
 // const getThisWeekThursday = () => {
@@ -113,11 +113,12 @@ const fetchData1 = computed(() => {
 
 // 获取数据
 // const url = 'http://localhost:3000/caigou'
-const url = 'http://127.0.0.3:8080/zsbb/caigou'
+// const url = 'http://127.0.0.3:8080/zsbb/caigou'
+const url = '/zsbb/caigou'
 const getdata = async () => {
   try {
     startDate.value = zsbbStore.starDate
-    const response = await axios.get(url + "?date=" + startDate.value)
+    const response = await service.get(url + "?date=" + startDate.value)
     fetchData.value = response.data
   } catch (error) {
     console.error('获取数据出错', error)
@@ -143,7 +144,7 @@ const save = (key: string) => {
 // PUT请求 - 保存修改数据
 async function updatedData(data: any) {
   try {
-    const response = await axios.put(`${url}/${data.id}/`, data);
+    const response = await service.put(`${url}/${data.id}/`, data);
     // activeIndex.value = -1;
   } catch (error) {
     console.error('Error updating post:', error);
@@ -163,7 +164,7 @@ zsbbStore.jinxiiangshuie=total
 // DELETE请求 - 删除数据
 async function handleDelete(postId: any) {
   try {
-    await axios.delete(`${url}/${postId}`);
+    await service.delete(`${url}/${postId}`);
     getdata()
     console.log('Post deleted successfully');
   } catch (error) {

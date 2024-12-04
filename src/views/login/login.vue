@@ -40,25 +40,28 @@ import router from '@/router';
 import {formatRoutes} from '@/utils/router'
 
 const userstate = userStore();
-const username=ref ('admin');
-const  password=ref('123456');
-
+const username=ref ('ces1');
+const  password=ref('1234567');
+// const url='/api/login'
+// const url='http://127.0.0.3:8080/users/login'
+const baseurl=import.meta.env.VITE_AP_BASE_URL
+const url='/users/login'
 async function login() {
   try {
-    const response = await axios.post('/api/login', {
+    const response = await axios.post(baseurl+url, {
       username: username.value,
       password: password.value
     })
-    if (response.data.action === 'success') {
+    if (response.status=== 200) {
       // 登录成功的操作,将用户信息写入本地localStorage
       // console.log('登录成功', response.data.data.user)
-      localStorage.setItem('userPermissions', JSON.stringify(response.data.data.user.Permissions));
-      localStorage.setItem('userUrl', JSON.stringify(response.data.data.user.userUrl));
-      localStorage.setItem('token', JSON.stringify(response.data.data.user.token));
+      localStorage.setItem('userPermissions', JSON.stringify(response.data.p));
+      localStorage.setItem('userUrl', JSON.stringify(response.data.m));
+      localStorage.setItem('token', JSON.stringify(response.data.token));
       const userInfo={
-        token:response.data.data.user.token,
-        userUrl:response.data.data.user.userUrl,
-        userPermissions:response.data.data.user.Permissions
+        token:response.data.token,
+        userUrl:response.data.m,
+        userPermissions:response.data.p
       } 
       userstate.loginUserStore(userInfo)//将本地信息写入pinia
       router.push('/remaining/home')

@@ -38,6 +38,7 @@
   import { reactive, ref, computed } from 'vue'
   import { startOfWeek, addDays } from 'date-fns';
   import axios from 'axios';
+  import service from '@/utils/interceptors';
   
   // 计算当前周四的日期
   const startDate = ref();//日期
@@ -69,10 +70,11 @@
   })
   
   // const url = 'http://localhost:3000/caigou'
-  const url = 'http://127.0.0.3:8080/zsbb/caigou/'
+  // const url = 'http://127.0.0.3:8080/zsbb/caigou/'
+  const url = '/zsbb/caigou/'
   const onSubmit = async () => {
     try {
-      const response = await axios.post(url, {
+      const response = await service.post(url, {
         date: startDate.value.toLocaleDateString(),
         title: form.title,
         shuliang: form.shuliang,

@@ -85,7 +85,7 @@ import { startOfWeek, addDays } from 'date-fns';
 import axios from 'axios';
 import { InfoFilled } from '@element-plus/icons-vue'
 import addcaigou from '@/layout/components/zhousibaobiao/addcaigou.vue'
-
+import service from '@/utils/interceptors';
 // 计算当前周四的日期
 const startDate = ref('');//日期
 const getThisWeekThursday = () => {
@@ -110,10 +110,12 @@ const fetchData1 = computed(() => {
       return [...fetchData.value].sort((a, b) => b.id - a.id);
     });
 // 获取数据
-const url = 'http://localhost:3000/caigou'
+// const url = 'http://localhost:3000/caigou'
+const url = '/zsbb/caigou'
 const getdata = async () => {
   try {
-    const response = await axios.get(url + "?date=" + startDate.value.toLocaleDateString())
+    // const response = await axios.get(url + "?date=" + startDate.value.toLocaleDateString())
+    const response = await service.get(url + "?date=" + startDate.value.toLocaleDateString())
     fetchData.value = response.data
   } catch (error) {
     console.error('获取数据出错', error)
@@ -142,7 +144,7 @@ const handleEditClick = (index) => {
 // PUT请求 - 保存修改数据
 async function updatedData(data) {
   try {
-    const response = await axios.put(`${url}/${data.id}`, data);
+    const response = await service.put(`${url}/${data.id}`, data);
     activeIndex.value = -1;
   } catch (error) {
     console.error('Error updating post:', error);
@@ -152,7 +154,7 @@ async function updatedData(data) {
 // DELETE请求 - 删除数据
 async function handleDelete(postId) {
   try {
-    await axios.delete(`${url}/${postId.id}`);
+    await service.delete(`${url}/${postId.id}`);
     getdata()
     console.log('Post deleted successfully');
   } catch (error) {
