@@ -30,7 +30,7 @@ import { ref, computed, reactive } from 'vue';
 import * as XLSX from 'xlsx';
 import service from '@/utils/interceptors';
 
-const url = '/zsbb/xiaoxiangfapiao'
+const url = '/zsbb/jinxiangfapiao'
 
 // 上传文件——————————————————
 // 绑定到input的onChange事件，
@@ -49,11 +49,11 @@ const handleExcel = async (event) => {
     // 假设第一行是标题行，下面的数据是我们需要展示的
     data.value = json.slice(1).map(row => ({
       key: row[0], // 假设A列是唯一键
-      title: row[3],
-      kaipiaoriqi: row[8],
-      jine: row[16],
-      piaomianshuie: row[18],
-      goumaifangmingcheng: row[7],
+      title: row[2],
+      kaipiaoriqi: row[5],
+      jine: row[6],
+      piaomianshuie: row[7],
+      xiaoshoufangmingcheng: row[10],
     }));
     try {
       const response = await service.post(`${url}/`, data.value
@@ -68,11 +68,10 @@ const handleExcel = async (event) => {
 
 }
 
-// 获取销项发票数据_______
+// 获取发票数据_______
 const fetchData = ref([])
 const getdata = async () => {
   try {
-    console.log('我动了')
     // startDate.value = zsbbStore.starDate
     // const response = await service.get(url + "?date=" + startDate.value)
     const response = await service.get(url + "/")
@@ -115,8 +114,8 @@ const columns = [
     width: '15%',
   },
   {
-    title: '购买方纳税人名称',
-    dataIndex: 'goumaifangmingcheng',
+    title: '销售方纳税人名称',
+    dataIndex: 'xiaoshoufangmingcheng',
     width: '15%',
   },
 ];
@@ -158,15 +157,14 @@ const start = () => {
 
 const getSelectedIds = () => {
   // const sdata=data.value
-  const selectedIds = state.selectedRowKeys.map(key => fetchData.value.find(item => key === item['id']).id);
+  const selectedIds = state.selectedRowKeys.map(key => fetchData.value.find(item => key === item['id'])['id']);
   // const selectedIds = state.selectedRowKeys.map(key => data.value.filter(item => key === item['key'])[0]);
-  console.log(selectedIds);
+  // console.log(selectedIds);
 };
 const onSelectChange = (selectedRowKeys: []) => {
-  console.log('selectedRowKeys changed: ', selectedRowKeys);
+  // console.log('selectedRowKeys changed: ', selectedRowKeys);
   state.selectedRowKeys = selectedRowKeys;
   getSelectedIds();
 };
 
-// ————————————————————————————.1
 </script>

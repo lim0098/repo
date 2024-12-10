@@ -57,9 +57,16 @@ git add .
  
 # 提交更改，包括一条提交信息
 git commit -m "描述您的更改"
+
+# 添加远程仓库地址（将YOUR_USERNAME和YOUR_REPO替换为实际的用户名和仓库名）
+git remote add origin git@github.com:lim0098/repo.git
  
-# 推送更改到远程仓库的主分支
+# 推送本地仓库到GitHub远程仓库
 git push origin master
+
+# 远程仓库取到本地 . 代表当前路径
+git clone <远程仓库URL> <本地路径>
+git clone git@github.com:lim0098/shenv.git .
 
 环境变量配置
 https://blog.csdn.net/weixin_55049839/article/details/140871095

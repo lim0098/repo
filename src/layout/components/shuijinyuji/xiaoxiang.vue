@@ -72,7 +72,7 @@ const handleExcel = async (event) => {
 const fetchData = ref([])
 const getdata = async () => {
   try {
-    console.log('我动了')
+    // console.log('我动了')
     // startDate.value = zsbbStore.starDate
     // const response = await service.get(url + "?date=" + startDate.value)
     const response = await service.get(url + "/")
@@ -160,13 +160,12 @@ const getSelectedIds = () => {
   // const sdata=data.value
   const selectedIds = state.selectedRowKeys.map(key => fetchData.value.find(item => key === item['id']).id);
   // const selectedIds = state.selectedRowKeys.map(key => data.value.filter(item => key === item['key'])[0]);
-  console.log(selectedIds);
+  // console.log(selectedIds);
 };
 const onSelectChange = (selectedRowKeys: []) => {
-  console.log('selectedRowKeys changed: ', selectedRowKeys);
+  // console.log('selectedRowKeys changed: ', selectedRowKeys);
   state.selectedRowKeys = selectedRowKeys;
   getSelectedIds();
 };
 
-// ————————————————————————————.1
 </script>
