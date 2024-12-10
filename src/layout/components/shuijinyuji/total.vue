@@ -60,6 +60,7 @@ const emits = defineEmits(['jinxiangUse', 'xiaoxiangUse'])
 
 const childhondlclick = () => {
   shuiStore.starDate = startDate.value.toLocaleDateString()
+  // console.log(shuiStore.starDate)
   emits('jinxiangUse')
   emits('xiaoxiangUse')
   // emits('a4Use')

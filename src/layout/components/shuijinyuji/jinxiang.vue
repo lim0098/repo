@@ -75,8 +75,8 @@ const fetchData = ref<any>([])
 const getdata = async () => {
   try {
     // startDate.value = zsbbStore.starDate
-    // const response = await service.get(url + "?date=" + startDate.value)
-    const response = await service.get(url + "/")
+    const response = await service.get(url + "?date=" + shuistore.starDate)
+    // const response = await service.get(url + "/")
     fetchData.value = response.data
   } catch (error) {
     console.error('获取数据出错', error)
