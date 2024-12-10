@@ -1,172 +1,74 @@
 <template>
-  <div class="content" style="width: 96%;">
+  <div class="header">
+    <total @jinxiangUse='usejinxiangMethod' @xiaoxiangUse='usexiaoxiangMethod'>
+    </total>
+  </div>
+  <div class="content">
+    <el-tabs v-model="activeName">
 
-    <div style="margin-bottom: 16px">
-      <a-button type="primary" :disabled="!hasSelected" :loading="state.loading" @click="start">
-        Reload
-      </a-button>
-      <span style="margin-left: 8px">
-        <template v-if="hasSelected">
-          {{ `Selected ${state.selectedRowKeys.length} items` }}
-        </template>
-      </span>
-    </div>
-    <input type="file" @change="handleExcel" />
-    <a-button type="primary" @click="getdata()">查询</a-button>
-    <a-button type="primary" @click="handleDelete(state.selectedRowKeys)">删除</a-button>
-    <a-table :row-selection="{ selectedRowKeys: state.selectedRowKeys, onChange: onSelectChange }" :columns="columns"
-      :dataSource="fetchData" :pagination="pagination" rowKey="id">
-      <template #headerCell="record">
-      </template>
-      <template #bodyCell="{ column, text, record }">
-        <!-- <template v-if="['title'].includes(column.dataIndex)"></template> -->
-      </template>
-    </a-table>
+      <!-- 采购标签 -->
+      <el-tab-pane label="进项明细" name="tabname1">
+        <div class="scroll-container">
+          <jinxiang ref='jinxiangRef'></jinxiang>
+        </div>
+      </el-tab-pane>
+
+      <!-- 销售标签 style="max-width: 100vh"-->
+      <el-tab-pane label="销项明细" name="tabname2">
+        <div class="scroll-container">
+          <xiaoxiang ref='xiaoxiangRef'></xiaoxiang>
+        </div>
+      </el-tab-pane>
+
+      <!-- 其他标签 -->
+      <el-tab-pane label="标签二" name="tabname3" v-if="checkPermi(['system:tabs:first'])">
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
+<script setup lang='ts'>
+/* ------------------------ 导入 与 引用 ----------------------------------- */
+import { ref, reactive, computed } from 'vue'
+import { checkPermi } from '@/permission';
+import jinxiang from '@/layout/components/shuijinyuji/jinxiang.vue';
+import xiaoxiang from '@/layout/components/shuijinyuji/xiaoxiang.vue';
+import total from '@/layout/components/shuijinyuji/total.vue';
+/* ------------------------ 变量 与 数据 ----------------------------------- */
+const activeName = ref('tabname1')//默认显示的标签页
 
-<script setup lang="ts">
-import { ref, computed, reactive } from 'vue';
-import * as XLSX from 'xlsx';
-import service from '@/utils/interceptors';
-
-const url = '/zsbb/xiaoxiangfapiao'
-
-// 上传文件——————————————————
-// 绑定到input的onChange事件，
-// 从文件读取数据并处理成后端需要的格式————————
-const data = ref([]);
-const handleExcel = async (event) => {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = async (e) => {
-    const data1 = new Uint8Array(e.target.result);
-    const workbook = XLSX.read(data1, { type: 'array' });
-    const sheetName = workbook.SheetNames[0];
-    const worksheet = workbook.Sheets[sheetName];
-    const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-    // 假设第一行是标题行，下面的数据是我们需要展示的
-    data.value = json.slice(1).map(row => ({
-      key: row[0], // 假设A列是唯一键
-      title: row[3],
-      kaipiaoriqi: row[8],
-      jine: row[16],
-      piaomianshuie: row[18],
-      goumaifangmingcheng: row[7],
-    }));
-    try {
-      const response = await service.post(`${url}/`, data.value
-      );
-      console.log(response.data);
-      getdata()
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  reader.readAsArrayBuffer(file);
-
+// jinxiang组件的方法
+const jinxiangRef = ref()
+const usejinxiangMethod = () => {
+  jinxiangRef.value.getdata()
 }
 
-// 获取销项发票数据_______
-const fetchData = ref([])
-const getdata = async () => {
-  try {
-    console.log('我动了')
-    // startDate.value = zsbbStore.starDate
-    // const response = await service.get(url + "?date=" + startDate.value)
-    const response = await service.get(url + "/")
-    fetchData.value = response.data
-  } catch (error) {
-    console.error('获取数据出错', error)
-  }
+// xiaoxiangR组件的方法
+const xiaoxiangRef = ref()
+const usexiaoxiangMethod = () => {
+  xiaoxiangRef.value.getdata()
 }
-
-// ——————分页————
-const pagination = {
-  // current: 1,
-  pageSize: 6,
-  // total: 0, // 总条数，由后端返回
-  // showSizeChanger: true,
-  // showQuickJumper: true,
-  // showTotal: total => `总共 ${total} 条`,
-}
-
-// ————————————表格中的列名——————————
-const columns = [
-  {
-    title: '数电票号码',
-    dataIndex: 'title',
-    width: '15%',
-  },
-  {
-    title: '开票日期',
-    dataIndex: 'kaipiaoriqi',
-    width: '15%',
-  },
-  {
-    title: '金额',
-    dataIndex: 'jine',
-    width: '15%',
-  },
-  {
-    title: '票面税额',
-    dataIndex: 'piaomianshuie',
-    width: '15%',
-  },
-  {
-    title: '购买方纳税人名称',
-    dataIndex: 'goumaifangmingcheng',
-    width: '15%',
-  },
-];
-
-// DELETE请求 - 删除数据
-async function handleDelete(postId: any) {
-  try {
-    await service.delete(`${url}/multiple_delete/?ids=${postId}`);
-    getdata()
-    console.log('deleted successfully');
-  } catch (error) {
-    console.error('Error deleting post:', error);
-  }
-}
-// 1.————————————表格中的选择框————————————————
-// type Key = string | number;
-const state = reactive<{
-  selectedRowKeys: [];
-  loading: boolean;
-}>({
-  selectedRowKeys: [], // Check here to configure the default column
-  loading: false,
-});
-const hasSelected = computed(() => state.selectedRowKeys.length > 0);
-
-const start = () => {
-  state.loading = true;
-  // ajax request after empty completing
-
-
-
-
-
-  setTimeout(() => {
-    state.loading = false;
-    state.selectedRowKeys = [];
-  }, 1000);
-};
-
-const getSelectedIds = () => {
-  // const sdata=data.value
-  const selectedIds = state.selectedRowKeys.map(key => fetchData.value.find(item => key === item['id']).id);
-  // const selectedIds = state.selectedRowKeys.map(key => data.value.filter(item => key === item['key'])[0]);
-  console.log(selectedIds);
-};
-const onSelectChange = (selectedRowKeys: []) => {
-  console.log('selectedRowKeys changed: ', selectedRowKeys);
-  state.selectedRowKeys = selectedRowKeys;
-  getSelectedIds();
-};
-
-// ————————————————————————————.1
 </script>
+
+<style>
+.scroll-container {
+  height: 490px;
+  overflow: auto;
+  /* border: 1px solid #9a9ed6; */
+  /* margin: 20px; */
+}
+
+.header,
+.content {
+  width: 96%;
+  padding: 3px;
+  margin: 5px;
+  /* margin-left: 20px; */
+  /* max-width: 100vh; */
+  /* max-height: 350px; */
+  /* margin-bottom: 15px; 边界高度 */
+  /* background-color: #90ecac; 背景色 */
+  border: 1px solid #9a9ed6;
+  /* 边框 */
+
+}
+</style>

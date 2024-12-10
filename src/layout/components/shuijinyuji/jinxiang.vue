@@ -1,9 +1,12 @@
 <template>
   <div class="content" style="width: 96%;">
-
+    <div>
+      <input type="file" @change="handleExcel" />
+      <a-button type="primary" @click="getdata()">查询</a-button>
+    </div>
     <div style="margin-bottom: 16px">
       <a-button type="primary" :disabled="!hasSelected" :loading="state.loading" @click="start">
-        Reload
+        删除
       </a-button>
       <span style="margin-left: 8px">
         <template v-if="hasSelected">
@@ -11,15 +14,11 @@
         </template>
       </span>
     </div>
-    <input type="file" @change="handleExcel" />
-    <a-button type="primary" @click="getdata()">查询</a-button>
-    <a-button type="primary" @click="handleDelete(state.selectedRowKeys)">删除</a-button>
     <a-table :row-selection="{ selectedRowKeys: state.selectedRowKeys, onChange: onSelectChange }" :columns="columns"
       :dataSource="fetchData" :pagination="pagination" rowKey="id">
       <template #headerCell="record">
       </template>
       <template #bodyCell="{ column, text, record }">
-        <!-- <template v-if="['title'].includes(column.dataIndex)"></template> -->
       </template>
     </a-table>
   </div>
@@ -29,14 +28,16 @@
 import { ref, computed, reactive } from 'vue';
 import * as XLSX from 'xlsx';
 import service from '@/utils/interceptors';
+import { useshuiStore } from '@/store/shui';
+
 
 const url = '/zsbb/jinxiangfapiao'
-
+const shuistore = useshuiStore()
 // 上传文件——————————————————
 // 绑定到input的onChange事件，
 // 从文件读取数据并处理成后端需要的格式————————
-const data = ref([]);
-const handleExcel = async (event) => {
+const data = ref<any>([]);
+const handleExcel = async (event: { target: { files: any[]; }; }) => {
   const file = event.target.files[0];
   if (!file) return;
   const reader = new FileReader();
@@ -47,13 +48,14 @@ const handleExcel = async (event) => {
     const worksheet = workbook.Sheets[sheetName];
     const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
     // 假设第一行是标题行，下面的数据是我们需要展示的
-    data.value = json.slice(1).map(row => ({
+    data.value = json.slice(1).map((row:any )=> ({
       key: row[0], // 假设A列是唯一键
       title: row[2],
       kaipiaoriqi: row[5],
       jine: row[6],
       piaomianshuie: row[7],
       xiaoshoufangmingcheng: row[10],
+      date:row[21]
     }));
     try {
       const response = await service.post(`${url}/`, data.value
@@ -69,7 +71,7 @@ const handleExcel = async (event) => {
 }
 
 // 获取发票数据_______
-const fetchData = ref([])
+const fetchData = ref<any>([])
 const getdata = async () => {
   try {
     // startDate.value = zsbbStore.starDate
@@ -96,27 +98,32 @@ const columns = [
   {
     title: '数电票号码',
     dataIndex: 'title',
-    width: '15%',
+    width: '18%',
   },
   {
     title: '开票日期',
     dataIndex: 'kaipiaoriqi',
-    width: '15%',
+    width: '18%',
   },
   {
     title: '金额',
     dataIndex: 'jine',
-    width: '15%',
+    width: '18%',
   },
   {
     title: '票面税额',
     dataIndex: 'piaomianshuie',
-    width: '15%',
+    width: '18%',
   },
   {
     title: '销售方纳税人名称',
     dataIndex: 'xiaoshoufangmingcheng',
-    width: '15%',
+    width: '20%',
+  },
+  {
+    title: '所属期',
+    dataIndex: 'date',
+    width: '8%',
   },
 ];
 
@@ -143,21 +150,16 @@ const hasSelected = computed(() => state.selectedRowKeys.length > 0);
 
 const start = () => {
   state.loading = true;
-  // ajax request after empty completing
-
-
-
-
-
+  handleDelete(state.selectedRowKeys)
   setTimeout(() => {
     state.loading = false;
     state.selectedRowKeys = [];
-  }, 1000);
+  }, 300);
 };
 
 const getSelectedIds = () => {
   // const sdata=data.value
-  const selectedIds = state.selectedRowKeys.map(key => fetchData.value.find(item => key === item['id'])['id']);
+  const selectedIds = state.selectedRowKeys.map(key => fetchData.value.find((item: { [x: string]: any; }) => key === item['id'])['id']);
   // const selectedIds = state.selectedRowKeys.map(key => data.value.filter(item => key === item['key'])[0]);
   // console.log(selectedIds);
 };
@@ -167,4 +169,14 @@ const onSelectChange = (selectedRowKeys: []) => {
   getSelectedIds();
 };
 
+// 将查询方法暴露给兄弟组件
+defineExpose({
+  getdata
+})
+
+// 对税额求和
+const total = computed(() => {
+  return Math.round(fetchData.value.reduce((sum: number, item: any) => sum + Number(item.piaomianshuie), 0) * 100) / 100
+})
+shuistore.jinxiiangshuie = total
 </script>
