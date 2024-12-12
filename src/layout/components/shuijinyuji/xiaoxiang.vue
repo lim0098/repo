@@ -1,22 +1,33 @@
 <template>
-  <div class="content" style="width: 96%;">
-    <div>
+  <div style="width: 96%;">
+    <!-- <div>
       <input type="file" @change="handleExcel" />
       <a-button type="primary" @click="getdata()">查询</a-button>
-    </div>
+    </div> -->
     <div style="margin-bottom: 16px">
-      <a-button type="primary" :disabled="!hasSelected" :loading="state.loading" @click="start">
-        删除
-      </a-button>
-      <span style="margin-left: 8px">
-        <template v-if="hasSelected">
-          {{ `Selected ${state.selectedRowKeys.length} items` }}
-        </template>
-      </span>
+      <a-row>
+        <a-col :span="4">
+          <a-button type="primary" :disabled="!hasSelected" :loading="state.loading" @click="start">
+            删除
+          </a-button>
+          <!-- </a-col> -->
+          <!-- <a-col :span="6"> -->
+          <span style="margin-left: 8px">
+            <template v-if="hasSelected">
+              {{ `Selected ${state.selectedRowKeys.length} items` }}
+            </template>
+          </span>
+        </a-col>
+        <a-col :span="6">
+          <a-input type="file" @change="handleExcel" :bordered="false" />
+        </a-col>
+        <a-col :span="6" style="margin: 5px;">
+          <a-button type="primary" @click="getdata()">查询</a-button>
+        </a-col>
+      </a-row>
     </div>
     <a-table :row-selection="{ selectedRowKeys: state.selectedRowKeys, onChange: onSelectChange }" :columns="columns"
       :dataSource="fetchData" :pagination="pagination" rowKey="id">
-
       <template #headerCell="record">
         <template v-if="record.column.dataIndex === 'skey'">
         </template>
@@ -53,14 +64,14 @@ const handleExcel = async (event: { target: { files: any[]; }; }) => {
     const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
     // 假设第一行是标题行，下面的数据是我们需要展示的
     // console.log(json)
-    data.value = json.slice(1).map((row:any) => ({
+    data.value = json.slice(1).map((row: any) => ({
       key: row[0], // 假设A列是唯一键
       title: row[3],
       kaipiaoriqi: row[8],
       jine: row[16],
       piaomianshuie: row[18],
       goumaifangmingcheng: row[7],
-      date:row[27]
+      date: row[27]
     }));
     try {
       const response = await service.post(`${url}/`, data.value
@@ -72,7 +83,6 @@ const handleExcel = async (event: { target: { files: any[]; }; }) => {
     }
   };
   reader.readAsArrayBuffer(file);
-
 }
 
 // 获取销项发票数据_______
@@ -92,7 +102,7 @@ const getdata = async () => {
 // ——————分页————
 const pagination = {
   // current: 1,
-  pageSize: 6,
+  pageSize: 4,
   // total: 0, // 总条数，由后端返回
   // showSizeChanger: true,
   // showQuickJumper: true,
@@ -104,27 +114,27 @@ const columns = [
   {
     title: '数电票号码',
     dataIndex: 'title',
-    width: '18%',
+    width: '16%',
   },
   {
     title: '开票日期',
     dataIndex: 'kaipiaoriqi',
-    width: '18%',
+    width: '16%',
   },
   {
     title: '金额',
     dataIndex: 'jine',
-    width: '18%',
+    width: '15%',
   },
   {
     title: '票面税额',
     dataIndex: 'piaomianshuie',
-    width: '18%',
+    width: '15%',
   },
   {
     title: '购买方纳税人名称',
     dataIndex: 'goumaifangmingcheng',
-    width: '20%',
+    width: '30%',
   },
   {
     title: '所属期',
@@ -143,6 +153,7 @@ async function handleDelete(postId: any) {
     console.error('Error deleting post:', error);
   }
 }
+
 // 1.————————————表格中的选择框————————————————
 // type Key = string | number;
 const state = reactive<{
@@ -152,6 +163,7 @@ const state = reactive<{
   selectedRowKeys: [], // Check here to configure the default column
   loading: false,
 });
+
 const hasSelected = computed(() => state.selectedRowKeys.length > 0);
 
 const start = () => {
@@ -169,6 +181,7 @@ const getSelectedIds = () => {
   // const selectedIds = state.selectedRowKeys.map(key => data.value.filter(item => key === item['key'])[0]);
   // console.log(selectedIds);
 };
+
 const onSelectChange = (selectedRowKeys: []) => {
   // console.log('selectedRowKeys changed: ', selectedRowKeys);
   state.selectedRowKeys = selectedRowKeys;
@@ -184,5 +197,5 @@ defineExpose({
 const total = computed(() => {
   return Math.round(fetchData.value.reduce((sum: number, item: any) => sum + Number(item.piaomianshuie), 0) * 100) / 100
 })
-shuistore.xiaoxiangshuie = total
+shuistore.updatexiaoxiang(total)
 </script>

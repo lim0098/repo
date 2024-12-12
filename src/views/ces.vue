@@ -3,23 +3,16 @@
     <total @jinxiangUse='usejinxiangMethod' @xiaoxiangUse='usexiaoxiangMethod'>
     </total>
   </div>
-  <div class="content">
-    <el-tabs v-model="activeName">
-
+  <div>
+    <el-tabs v-model="activeName" class="content">
       <!-- 采购标签 -->
       <el-tab-pane label="进项明细" name="tabname1">
-        <div class="scroll-container">
-          <jinxiang ref='jinxiangRef'></jinxiang>
-        </div>
+        <jinxiang ref='jinxiangRef'></jinxiang>
       </el-tab-pane>
-
-      <!-- 销售标签 style="max-width: 100vh"-->
+      <!-- 销售标签 -->
       <el-tab-pane label="销项明细" name="tabname2">
-        <div class="scroll-container">
-          <xiaoxiang ref='xiaoxiangRef'></xiaoxiang>
-        </div>
+        <xiaoxiang ref='xiaoxiangRef'></xiaoxiang>
       </el-tab-pane>
-
       <!-- 其他标签 -->
       <el-tab-pane label="标签二" name="tabname3" v-if="checkPermi(['system:tabs:first'])">
       </el-tab-pane>
@@ -50,15 +43,14 @@ const usexiaoxiangMethod = () => {
 </script>
 
 <style>
-.scroll-container {
-  height: 490px;
-  overflow: auto;
-  /* border: 1px solid #9a9ed6; */
-  /* margin: 20px; */
-}
-
-.header,
-.content {
+/* .scroll-container {
+  height: 470px;
+  overflow: auto; */
+/* border: 1px solid #9a9ed6; */
+/* margin: 20px; */
+/* } */
+.header {
+  height: 150px;
   width: 96%;
   padding: 3px;
   margin: 5px;
@@ -69,6 +61,9 @@ const usexiaoxiangMethod = () => {
   /* background-color: #90ecac; 背景色 */
   border: 1px solid #9a9ed6;
   /* 边框 */
+}
 
+.content {
+  height: 510px;
 }
 </style>

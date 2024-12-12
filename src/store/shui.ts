@@ -21,6 +21,12 @@ export const useshuiStore = defineStore({
             this.starDate = starDate
             // this.endDate = endDate
         },
+        updatexiaoxiang( newValue: any) {
+            this.xiaoxiangshuie = newValue;
+        },
+        updatejinxiang( newValue: any) {
+            this.jinxiiangshuie = newValue;
+        },
         delDate() {
             this.starDate = ''
         },

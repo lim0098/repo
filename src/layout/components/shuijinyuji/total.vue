@@ -1,8 +1,8 @@
 <template>
   <el-form :inline="true" class="demo-form-inline" label-position="right" style="max-width: 90vh" label-width="150px">
-    <el-form-item label="开始日期">
+    <el-form-item label="查询期间">
       <el-col :span="6">
-        <el-date-picker v-model="startDate" type="date" placeholder="Pick a date" clearable />
+        <el-date-picker v-model="startDate" type="month" placeholder="Pick a date" clearable />
       </el-col>
     </el-form-item>
     <el-form-item>
@@ -38,31 +38,36 @@
 
 </template>
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { onMounted, ref, } from 'vue';
 import { startOfWeek, addDays } from 'date-fns';
 import { useshuiStore } from '@/store/shui'
 
+const shuiStore = useshuiStore()
 // 计算当前周四的日期
 const startDate = ref();//日期
 const getThisWeekThursday = () => {
   const now = new Date()
   const start = startOfWeek(now)
-  return addDays(start, 4)
+  // return addDays(start, 4)
+  // return new Date(now.getFullYear(), now.getMonth(), 1);
+  startDate.value= new Date(now.getFullYear(), now.getMonth(), 1);
+  shuiStore.starDate = startDate.value.toLocaleDateString()
 };
-startDate.value = getThisWeekThursday();// 设置默认显示的日期
 
+// startDate.value = getThisWeekThursday();// 设置默认显示的日期
 // 日期存入pinia
-const shuiStore = useshuiStore()
-shuiStore.starDate = startDate.value.toLocaleDateString()
+onMounted(()=>{
+  getThisWeekThursday()
+  console.log(shuiStore.starDate)
+})
+
 
 // 接收兄弟组件的方法
 const emits = defineEmits(['jinxiangUse', 'xiaoxiangUse'])
-
 const childhondlclick = () => {
   shuiStore.starDate = startDate.value.toLocaleDateString()
   // console.log(shuiStore.starDate)
   emits('jinxiangUse')
   emits('xiaoxiangUse')
-  // emits('a4Use')
 }
 </script>

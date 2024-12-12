@@ -1,29 +1,29 @@
 <template>
-    <div class="toolbar">
-        <el-dropdown>
-            <el-icon :size="25" style="margin-right: 8px; margin-top: 1px">
-                <setting />
-            </el-icon>
-            <template #dropdown>
-                <el-dropdown-menu>
-                    <el-dropdown-item>View</el-dropdown-item>
-                    <el-dropdown-item>Add</el-dropdown-item>
-                    <el-dropdown-item>Delete</el-dropdown-item>
-                </el-dropdown-menu>
-            </template>
-        </el-dropdown>
-        <span><button @click="logout">退出登录</button></span>
-        </div>
-  </template>
+  <div class="toolbar">
+    <el-dropdown>
+      <el-icon :size="25" style="margin-right: 8px; margin-top: 1px">
+        <setting />
+      </el-icon>
+      <template #dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item>View</el-dropdown-item>
+          <el-dropdown-item>Add</el-dropdown-item>
+          <el-dropdown-item>Delete</el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
+    </el-dropdown>
+    <span><button @click="logout">退出登录</button></span>
+  </div>
+</template>
 <script lang="ts" setup>
 import { Menu as IconMenu, Message, Setting } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router';
 import { userStore } from '@/store/user';
- 
+
 const router = useRouter();
 const store = userStore();
- 
-const logout =  () => {
+
+const logout = () => {
   try {
     // 清除认证状态，例如清除token
     store.logout();
